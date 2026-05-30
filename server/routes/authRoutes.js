@@ -1,12 +1,13 @@
 import express from 'express'
 import authController from '../controllers/authController.js'
+import protect from '../middlewares/authMiddlewares.js'
 
 
 
 const router = express.Router()
 
-router.post("/register" , authController.registerUser)
-router.post("/login" , authController.loginUser)
-
+router.post("/register"  , authController.registerUser)
+router.post("/login"  , authController.loginUser)
+router.post("/private" , protect.forUser, authController.privateController)
 
 export default router

@@ -3,6 +3,10 @@ import dotenv from 'dotenv'
 import colors from 'colors'
 import connectDB from './config/dbconfig.js'
 import authRoutes from "./routes/authRoutes.js"
+import errorHandler from './middlewares/errorHandler.js'
+import adminControllers from './controllers/adminControllers.js'
+import adminRoutes from "./routes/adminRoutes.js"
+import userRoutes from "./routes/userRoutes.js"
 
 dotenv.config()
 
@@ -14,10 +18,15 @@ const app = express()
 connectDB()
 
 app.use(express.json())
-app.use(express.urlencoded())
+app.use(express.urlencoded({ extended: true }))
 //auth routes
 app.use("/api/auth" , authRoutes)
 
+app.use("/api/admin" , adminRoutes)
+
+app.use("/api/user" , userRoutes)
+
+app.use(errorHandler)
 
 app.listen( PORT , ()=>
 {
