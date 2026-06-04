@@ -7,6 +7,7 @@ import errorHandler from './middlewares/errorHandler.js'
 import adminControllers from './controllers/adminControllers.js'
 import adminRoutes from "./routes/adminRoutes.js"
 import userRoutes from "./routes/userRoutes.js"
+import imageGenRoutes from "./routes/imageGenRoutes.js"
 
 dotenv.config()
 
@@ -25,6 +26,8 @@ app.use("/api/auth" , authRoutes)
 app.use("/api/admin" , adminRoutes)
 
 app.use("/api/user" , userRoutes)
+
+app.use("/api/image", imageGenRoutes)
 
 app.use(errorHandler)
 

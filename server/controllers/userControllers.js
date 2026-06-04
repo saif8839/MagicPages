@@ -2,6 +2,7 @@ import uploadToCloudinary from "../middlewares/cloudinaryMiddlewares.js"
 import fs from "node:fs"
 
 import ReferenceImage from "../models/referenceImageModel.js"
+import { get } from "mongoose"
 
 const uploadReferenceImage = async(req , res) =>
 {
@@ -32,12 +33,24 @@ const uploadReferenceImage = async(req , res) =>
 }
 
 
-const getMyReferenceImage =  async (req , res ) =>
+const getMyReferenceImages =  async (req , res ) =>
 {
+
+    const userId = req.user._id
+
+    const image  = await ReferenceImage.find({user : userId})
+
+    if(!image)
+    {
+        res.status(404)
+        throw new Error("Image Not Found")
+    }
+
+    res.status(201).json(image)
 
 }
 
 
-const userController = {uploadReferenceImage}
+const userController = {uploadReferenceImage , getMyReferenceImages}
 
 export default userController

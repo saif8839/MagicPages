@@ -8,5 +8,6 @@ const router = express.Router()
 
 router.post("/upload" , protect.forUser , upload.single('image')  , userController.uploadReferenceImage )
 
+router.get("/images" , protect.forUser , userController.getMyReferenceImages )
 
 export default router
