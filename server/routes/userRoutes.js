@@ -10,4 +10,6 @@ router.post("/upload" , protect.forUser , upload.single('image')  , userControll
 
 router.get("/images" , protect.forUser , userController.getMyReferenceImages )
 
+router.post("/request_credits" , protect.forUser , userController.requestCredits )
+
 export default router

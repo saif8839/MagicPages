@@ -3,6 +3,7 @@ import fs from "node:fs"
 
 import ReferenceImage from "../models/referenceImageModel.js"
 import { get } from "mongoose"
+import CreditRequest from "../models/creditRequestModel.js"
 
 const uploadReferenceImage = async(req , res) =>
 {
@@ -51,6 +52,41 @@ const getMyReferenceImages =  async (req , res ) =>
 }
 
 
-const userController = {uploadReferenceImage , getMyReferenceImages}
+const requestCredits = async (req,res) =>
+{
+    
+    const {credits} = req.body
+
+    if(!credits)
+    {
+        res.status(404)
+        throw new Error("Please Enter Requested Credits......")
+    }
+
+    const userId = req.user._id
+
+    const creditRequest = await new CreditRequest(
+        {
+            user : userId,
+            credits : credits 
+        }
+    )
+
+    await creditRequest.save()
+    await creditRequest.populate("user")
+
+    if(!creditRequest)
+    {
+        res.status(409)
+        throw new Error("No Credit Request Created......!")
+    }
+
+    res.status(201).json(creditRequest)
+
+}
+
+
+
+const userController = {uploadReferenceImage , getMyReferenceImages , requestCredits}
 
 export default userController

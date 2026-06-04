@@ -1,3 +1,4 @@
+import CreditRequest from "../models/creditRequestModel.js"
 import User from "../models/userModel.js"
 
 const getAllUsers = async  (req , res)=>
@@ -39,7 +40,48 @@ const updateUser = async (req , res) =>
 }
 
 
+const getCreditRequests = async (req , res) =>
+{
+    const creditRequests = await CreditRequest.find().populate("user")
 
-const adminControllers = {getAllUsers , updateUser}
+    if(!creditRequests)
+    {
+        res.status(409)
+        throw new Error("NO crtedit Requests Found")
+    }
+
+    res.status(201).json(creditRequests)
+}
+
+const updateCreditRequest = async (req , res) =>
+{
+    const requestId = req.params.rid
+    const {isApproved} = req.body
+
+    const updatedRequest = await CreditRequest.findByIdAndUpdate(requestId , {isApproved : isApproved} , {new : true})
+
+    const user = await User.findById(updatedRequest.user)
+
+    if(updatedRequest.isApproved)
+    {
+        await User.findByIdAndUpdate(user._id , { credits : user.credits + updatedRequest.credits} , {new : true})
+        res.status(201).json({
+            msg : "Credits Approved",
+            user : user
+        })
+    }
+    else{
+        res.status(200).json({
+            msg : "Credits Not Approved",
+            user : user
+        })
+    }
+    
+    
+
+}
+
+
+const adminControllers = {getAllUsers , updateUser , getCreditRequests , updateCreditRequest}
 
 export default adminControllers
