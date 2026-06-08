@@ -1,5 +1,8 @@
+import uploadToCloudinary from "../middlewares/cloudinaryMiddlewares.js"
 import CreditRequest from "../models/creditRequestModel.js"
+import ImageTemplate from "../models/templateModel.js"
 import User from "../models/userModel.js"
+import fs from "node:fs"
 
 const getAllUsers = async  (req , res)=>
 {
@@ -76,12 +79,39 @@ const updateCreditRequest = async (req , res) =>
             user : user
         })
     }
-    
-    
-
 }
 
+const createTemplate = async (req , res)=>
+{
+    const {title , prompt , creditsRequired} = req.body
 
-const adminControllers = {getAllUsers , updateUser , getCreditRequests , updateCreditRequest}
+
+    if(!title || !prompt || !creditsRequired)
+    {
+        res.status(409)
+        throw new Error("Please Fill All Details!!!")
+    }
+
+    const imageURL = await uploadToCloudinary(req.file.path)
+    fs.unlinkSync(req.file.path)
+
+    if(!imageURL)
+    {
+        res.status(409)
+        throw new Error("Image Template Not Created...")
+    }
+
+    const imageTemplate = await ImageTemplate.create({
+        title : title,
+        prompt : prompt,
+        imageURL : imageURL.secure_url,
+        creditsExpense : creditsRequired
+    })
+
+
+    res.status(200).json(imageTemplate)
+}
+
+const adminControllers = {getAllUsers , updateUser , getCreditRequests , updateCreditRequest , createTemplate}
 
 export default adminControllers

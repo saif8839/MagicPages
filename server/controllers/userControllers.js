@@ -4,6 +4,7 @@ import fs from "node:fs"
 import ReferenceImage from "../models/referenceImageModel.js"
 import { get } from "mongoose"
 import CreditRequest from "../models/creditRequestModel.js"
+import ImageTemplate from "../models/templateModel.js"
 
 const uploadReferenceImage = async(req , res) =>
 {
@@ -86,7 +87,20 @@ const requestCredits = async (req,res) =>
 }
 
 
+const getTemplates = async (req , res) =>
+{
+    const templates = await ImageTemplate.find()
 
-const userController = {uploadReferenceImage , getMyReferenceImages , requestCredits}
+    if(!templates)
+    {
+        res.status(404)
+        throw new Error("No Templates Found")
+    }
+
+    res.status(200).json(templates)
+}
+
+
+const userController = {uploadReferenceImage , getMyReferenceImages , requestCredits , getTemplates}
 
 export default userController

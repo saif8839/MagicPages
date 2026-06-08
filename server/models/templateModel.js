@@ -20,7 +20,7 @@ import mongoose from "mongoose";
         required : true
     },
     creditExpense : {
-        type : number,
+        type : Number,
         default : 0,
         required : true
     }

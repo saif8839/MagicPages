@@ -12,4 +12,7 @@ router.get("/images" , protect.forUser , userController.getMyReferenceImages )
 
 router.post("/request_credits" , protect.forUser , userController.requestCredits )
 
+router.get("/templates" , protect.forUser , userController.getTemplates )
+
+
 export default router
