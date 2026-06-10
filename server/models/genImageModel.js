@@ -6,8 +6,9 @@ const genImage = new mongoose.Schema(
     {
         user : {
             type : mongoose.Schema.Types.ObjectId,
-            required : true,
-            ref : 'User'
+            ref : 'User',
+            required : true
+            
         },
         imageURL : {
             type : String,

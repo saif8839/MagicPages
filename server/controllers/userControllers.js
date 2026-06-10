@@ -1,10 +1,11 @@
 import uploadToCloudinary from "../middlewares/cloudinaryMiddlewares.js"
 import fs from "node:fs"
-
+import User from "../models/userModel.js"
 import ReferenceImage from "../models/referenceImageModel.js"
 import { get } from "mongoose"
 import CreditRequest from "../models/creditRequestModel.js"
 import ImageTemplate from "../models/templateModel.js"
+import GenImage from "../models/genImageModel.js"
 
 const uploadReferenceImage = async(req , res) =>
 {
@@ -101,6 +102,30 @@ const getTemplates = async (req , res) =>
 }
 
 
-const userController = {uploadReferenceImage , getMyReferenceImages , requestCredits , getTemplates}
+const userProfile = async (req ,res ) =>
+{
+        const userId = req.user._id
+
+        const user = await User.findById(userId)
+        const referenceImage = await  ReferenceImage.find({user : user})
+        const generatedImage  = await GenImage.find({user : user})
+        const creditRequest = await CreditRequest.find({user : user})
+
+        if(!user)
+        {
+            res.status(409)
+            throw new Error("User Not Found")
+        }
+
+        const userProfileInfo = {
+            user : user , referenceImage : referenceImage , generatedImage ,  creditRequest
+        }
+
+        res.status(200).json(userProfileInfo)
+
+}
+
+
+const userController = {uploadReferenceImage , getMyReferenceImages , requestCredits , getTemplates , userProfile}
 
 export default userController

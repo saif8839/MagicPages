@@ -14,5 +14,7 @@ router.post("/request_credits" , protect.forUser , userController.requestCredits
 
 router.get("/templates" , protect.forUser , userController.getTemplates )
 
+router.get("/profile" , protect.forUser , userController.userProfile )
+
 
 export default router
