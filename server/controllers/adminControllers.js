@@ -83,10 +83,10 @@ const updateCreditRequest = async (req , res) =>
 
 const createTemplate = async (req , res)=>
 {
-    const {title , prompt , creditsRequired} = req.body
+    const {title , prompt , creditsExpense} = req.body
 
 
-    if(!title || !prompt || !creditsRequired)
+    if(!title || !prompt || !creditsExpense)
     {
         res.status(409)
         throw new Error("Please Fill All Details!!!")
@@ -105,7 +105,7 @@ const createTemplate = async (req , res)=>
         title : title,
         prompt : prompt,
         imageURL : imageURL.secure_url,
-        creditsExpense : creditsRequired
+        creditsExpense : creditsExpense
     })
 
 
